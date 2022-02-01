@@ -29,19 +29,19 @@ function openDatabase() {
 const db = openDatabase();
 export default function App() {
   const [DataRes, setRes] = useState([]);
-  const [level, setlevel] = useState(null);
-  const [items, setItems] = useState([]);
-  useEffect(() => {
-    const getACType = async () => {
-      const severityResp = await axios.get(
-        "https://apisafety.piac.com.pk/index.php/api/severity_levels"
-      );
-      // console.log(severityResp.data.data);
-      setRes(severityResp.data.data);
-      // console.log(DataRes);
-    };
-    getACType();
-  }, []);
+  const [level, setlevel] = useState("");
+  // const [items, setItems] = useState([]);
+
+  const getACType = async () => {
+    const severityResp = await axios.get(
+      "https://apisafety.piac.com.pk/index.php/api/severity_levels"
+    );
+    console.log(severityResp.data.data);
+    setRes(severityResp.data.data);
+    console.log("DataFromAPI-------------->", DataRes);
+  };
+
+  //
   useEffect(() => {
     db.transaction((tx) => {
       tx.executeSql(
@@ -53,7 +53,11 @@ export default function App() {
         // }
       );
     });
+    getACType();
   }, []);
+  //
+
+  useEffect(() => {}, []);
   useEffect(() => {
     const addDataInTable = () => {
       if (level) {
